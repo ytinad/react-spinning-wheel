@@ -47,6 +47,10 @@ var SpinningWheel = function SpinningWheel(_ref) {
     setTimeout(function () {
       window.scrollTo(0, 1);
     }, 0);
+
+    if (autoSpin) {
+      spin();
+    }
   }, []);
 
   var wheelInit = function wheelInit() {

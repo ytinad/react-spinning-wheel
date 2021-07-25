@@ -35,6 +35,9 @@ const SpinningWheel = ({
 		setTimeout(() => {
 			window.scrollTo(0, 1)
 		}, 0)
+		if(autoSpin) {
+			spin()
+		}
 	}, [])
 	const wheelInit = () => {
 		initCanvas()
