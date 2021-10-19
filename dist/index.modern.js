@@ -17,10 +17,10 @@ var SpinningWheel = function SpinningWheel(_ref) {
       _ref$downDuration = _ref.downDuration,
       downDuration = _ref$downDuration === void 0 ? 1000 : _ref$downDuration,
       _ref$fontFamily = _ref.fontFamily,
-      fontFamily = _ref$fontFamily === void 0 ? 'proxima-nova' : _ref$fontFamily,
+      fontFamily = _ref$fontFamily === void 0 ? "proxima-nova" : _ref$fontFamily,
       _ref$autoSpin = _ref.autoSpin,
       autoSpin = _ref$autoSpin === void 0 ? false : _ref$autoSpin;
-  var currentSegment = '';
+  var currentSegment = "";
   var isStarted = false;
 
   var _useState = useState(false),
@@ -37,18 +37,11 @@ var SpinningWheel = function SpinningWheel(_ref) {
   var downTime = options.length * downDuration;
   var spinStart = 0;
   var frames = 0;
-  var centerX = 300;
-  var centerY = 300;
-  useEffect(function () {
-    wheelInit();
-    setTimeout(function () {
-      window.scrollTo(0, 1);
-    }, 0);
-
-    if (autoSpin) {
-      spin();
-    }
-  }, []);
+  var centerMargin = size <= 220 ? 5 : 20;
+  var centerX = size + centerMargin;
+  var centerY = size + centerMargin;
+  var canvasHeight = centerX * 2 + centerMargin * 2;
+  var canvasWidth = centerY * 2 + centerMargin * 2;
 
   var wheelInit = function wheelInit() {
     initCanvas();
@@ -56,21 +49,21 @@ var SpinningWheel = function SpinningWheel(_ref) {
   };
 
   var initCanvas = function initCanvas() {
-    var canvas = document.getElementById('canvas');
+    var canvas = document.getElementById("canvas");
 
-    if (navigator.appVersion.indexOf('MSIE') !== -1) {
-      canvas = document.createElement('canvas');
-      canvas.setAttribute('width', 1000);
-      canvas.setAttribute('height', 600);
-      canvas.setAttribute('id', 'canvas');
-      document.getElementById('wheel').appendChild(canvas);
+    if (navigator.appVersion.indexOf("MSIE") !== -1) {
+      canvas = document.createElement("canvas");
+      canvas.setAttribute("width", canvasHeight);
+      canvas.setAttribute("height", canvasWidth);
+      canvas.setAttribute("id", "canvas");
+      document.getElementById("wheel").appendChild(canvas);
     }
 
     if (!autoSpin) {
-      canvas.addEventListener('click', spin, false);
+      canvas.addEventListener("click", spin, false);
     }
 
-    canvasContext = canvas.getContext('2d');
+    canvasContext = canvas.getContext("2d");
   };
 
   var spin = function spin() {
@@ -154,8 +147,8 @@ var SpinningWheel = function SpinningWheel(_ref) {
     ctx.save();
     ctx.translate(centerX, centerY);
     ctx.rotate((lastAngle + angle) / 2);
-    ctx.fillStyle = contrastColor || 'white';
-    ctx.font = 'bold 1em ' + fontFamily;
+    ctx.fillStyle = contrastColor || "white";
+    ctx.font = "bold " + (size <= 220 ? 0.75 : 1) + "em " + fontFamily;
     ctx.fillText(value.substr(0, 21), size / 2 + 20, 0);
     ctx.restore();
   };
@@ -166,10 +159,10 @@ var SpinningWheel = function SpinningWheel(_ref) {
     var len = options.length;
     var PI2 = Math.PI * 2;
     ctx.lineWidth = 1;
-    ctx.strokeStyle = primaryColor || 'black';
-    ctx.textBaseline = 'middle';
-    ctx.textAlign = 'center';
-    ctx.font = '1em ' + fontFamily;
+    ctx.strokeStyle = primaryColor || "black";
+    ctx.textBaseline = "middle";
+    ctx.textAlign = "center";
+    ctx.font = (size <= 220 ? 0.75 : 1) + "em " + fontFamily;
 
     for (var i = 1; i <= len; i++) {
       var angle = PI2 * (i / len) + angleCurrent;
@@ -180,16 +173,16 @@ var SpinningWheel = function SpinningWheel(_ref) {
     ctx.beginPath();
     ctx.arc(centerX, centerY, 50, 0, PI2, false);
     ctx.closePath();
-    ctx.fillStyle = primaryColor || 'black';
+    ctx.fillStyle = primaryColor || "black";
     ctx.lineWidth = 10;
-    ctx.strokeStyle = contrastColor || 'white';
+    ctx.strokeStyle = contrastColor || "white";
     ctx.fill();
-    ctx.font = 'bold 1em ' + fontFamily;
-    ctx.fillStyle = contrastColor || 'white';
-    ctx.textAlign = 'center';
+    ctx.font = "bold " + (size <= 220 ? 0.75 : 1) + "em " + fontFamily;
+    ctx.fillStyle = contrastColor || "white";
+    ctx.textAlign = "center";
 
     if (!autoSpin) {
-      ctx.fillText(buttonText || 'Spin', centerX, centerY + 3);
+      ctx.fillText(buttonText || "Spin", centerX, centerY + 3);
     }
 
     ctx.stroke();
@@ -197,15 +190,15 @@ var SpinningWheel = function SpinningWheel(_ref) {
     ctx.arc(centerX, centerY, size, 0, PI2, false);
     ctx.closePath();
     ctx.lineWidth = 10;
-    ctx.strokeStyle = primaryColor || 'black';
+    ctx.strokeStyle = primaryColor || "black";
     ctx.stroke();
   };
 
   var drawNeedle = function drawNeedle() {
     var ctx = canvasContext;
     ctx.lineWidth = 1;
-    ctx.strokeStyle = contrastColor || 'white';
-    ctx.fileStyle = contrastColor || 'white';
+    ctx.strokeStyle = contrastColor || "white";
+    ctx.fileStyle = contrastColor || "white";
     ctx.beginPath();
     ctx.moveTo(centerX + 20, centerY - 50);
     ctx.lineTo(centerX - 20, centerY - 50);
@@ -215,27 +208,37 @@ var SpinningWheel = function SpinningWheel(_ref) {
     var change = angleCurrent + Math.PI / 2;
     var i = options.length - Math.floor(change / (Math.PI * 2) * options.length) - 1;
     if (i < 0) i = i + options.length;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.fillStyle = primaryColor || 'black';
-    ctx.font = 'bold 1.5em ' + fontFamily;
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+    ctx.fillStyle = primaryColor || "black";
+    ctx.font = "bold " + (size <= 220 ? 1 : 1.5) + "em " + fontFamily;
     currentSegment = options[i];
     isStarted && ctx.fillText(currentSegment, centerX + 10, centerY + size + 50);
   };
 
   var clear = function clear() {
     var ctx = canvasContext;
-    ctx.clearRect(0, 0, 1000, 800);
+    ctx.clearRect(0, 0, canvasHeight, canvasWidth);
   };
 
+  useEffect(function () {
+    wheelInit();
+    setTimeout(function () {
+      window.scrollTo(0, 1);
+    }, 0);
+
+    if (autoSpin) {
+      spin();
+    }
+  }, []);
   return /*#__PURE__*/React.createElement("div", {
     id: "wheel"
   }, /*#__PURE__*/React.createElement("canvas", {
     id: "canvas",
-    width: "1000",
-    height: "800",
+    width: canvasWidth,
+    height: canvasHeight,
     style: {
-      pointerEvents: isFinished && isOnlyOnce ? 'none' : 'auto'
+      pointerEvents: isFinished && isOnlyOnce ? "none" : "auto"
     }
   }));
 };
